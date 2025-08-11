@@ -22,4 +22,6 @@ async function cargarGeoPesos() {
 }
 
 cargarGeoPesos();
-setInterval(cargarGeoPesos, 2 * 60 * 60 * 1000); // Se actualiza cada 2 horas
+setInterval(fetchAndDisplayData, 5 * 60 * 1000); // Cada 5 minutos
+
+
