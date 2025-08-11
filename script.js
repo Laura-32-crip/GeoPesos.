@@ -5,32 +5,36 @@ async function cargarGeoPesos() {
     const texto = await respuesta.text();
     
     const lineas = texto.trim().split('\n');
-    const tbody = document.getElementById("geoTable").querySelector("tbody");
+    const tabla = document.querySelector("#geoTable tbody");
     
-    tbody.innerHTML = ""; // Limpia antes de volver a cargar
+    tabla.innerHTML = ""; // Limpia antes de volver a cargar
 
     for (let i = 1; i < lineas.length; i++) {
         const fila = lineas[i].split(",");
         const tr = document.createElement("tr");
-        
-        fila.forEach((columna, index) => {
-            const td = document.createElement("td");
-            if(index === 1) { // Columna de GeoPesos
-                const valorNum = Number(columna);
-                if(!isNaN(valorNum)) {
-                    td.textContent = valorNum.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " 💰";
-                } else {
-                    td.textContent = columna;
-                }
-            } else {
-                td.textContent = columna;
-            }
-            tr.appendChild(td);
-        });
 
-        tbody.appendChild(tr);
+        // Nombre del estudiante
+        const tdNombre = document.createElement("td");
+        tdNombre.textContent = fila[0];
+        tr.appendChild(tdNombre);
+
+        // GeoPesos con formato y emoji moneda
+        const tdGeoPesos = document.createElement("td");
+        let valor = parseFloat(fila[1].replace(",", "."));
+        if (isNaN(valor)) valor = 0;
+        tdGeoPesos.textContent = valor.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " 💰";
+        tr.appendChild(tdGeoPesos);
+
+        tabla.appendChild(tr);
     }
+
+    // Mostrar la fecha y hora de última actualización
+    const ahora = new Date();
+    const fechaFormateada = ahora.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' });
+    document.getElementById("ultimaActualizacion").textContent = `Última actualización: ${fechaFormateada}`;
 }
 
+// Carga inicial y refresca cada 5 minutos
 cargarGeoPesos();
-setInterval(cargarGeoPesos, 5 * 60 * 1000); // Actualiza cada 5 minutos
+setInterval(cargarGeoPesos, 5 * 60 * 1000);
+
