@@ -5,9 +5,9 @@ async function cargarGeoPesos() {
     const texto = await respuesta.text();
     
     const lineas = texto.trim().split('\n');
-    const tabla = document.getElementById("tabla");
+    const tbody = document.getElementById("geoTable").querySelector("tbody");
     
-    tabla.innerHTML = ""; // Limpia antes de volver a cargar
+    tbody.innerHTML = ""; // Limpia antes de volver a cargar
 
     for (let i = 1; i < lineas.length; i++) {
         const fila = lineas[i].split(",");
@@ -17,12 +17,13 @@ async function cargarGeoPesos() {
             td.textContent = columna;
             tr.appendChild(td);
         });
-        tabla.appendChild(tr);
+        tbody.appendChild(tr);
     }
 }
 
 cargarGeoPesos();
-setInterval(cargarGeoPesos, 5 * 60 * 1000); // Cada 5 minutos
+setInterval(cargarGeoPesos, 5 * 60 * 1000); // Actualiza cada 5 minutos
+
 
 
 
